@@ -1,11 +1,16 @@
 <?php
-  require "vendor/autoload.php";
-    $app = new Slim\App();
+require "vendor/autoload.php";
+require "controler/controler.php";
 
-    $app->get('/', function($request, $response, $args){
-        $response->write("<h1>Hola </h1>");
-        return $response;
-  });
-  
-  $app->run();
- ?>
+$app = new Slim\App();
+
+//Dependencias
+$c = $app->getContainer();
+$c['view'] =new Slim\Views\PhpRenderer('view/');
+$c['urlbase']=str_replace("/index.php","",$c->get('request')->getUri()->getBasePath());
+
+//URLs
+$app->get("/question/new", "\Controler:newQuestion");
+$app->post("/question/new", "\Controler:createQuestion");
+$app->run();
+?>
