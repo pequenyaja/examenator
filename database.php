@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-  </head>
-  <body>
 
-    <?php
+<head>
+	<meta charset="utf-8"> </head>
+
+<body>
+	<?php
 
     function connect_to_host($host, $username, $password){
       try{
@@ -89,6 +89,19 @@ cadenaSQL;
       return result($connection, $res);
     }
 
+    function create_table_estadisticas($connection){
+      $sql = <<<cadenaSQL
+create table Estadisticas(
+  ruta varchar(500),
+  clicks int
+  )
+cadenaSQL;
+
+      $res = $connection->exec($sql);
+      return result($connection, $res);
+    }
+
+
     function insert_data_to_temas($connection){
       $sql = <<<cadenaSQL
 insert into Temas(titulo, titulo_url)
@@ -98,8 +111,7 @@ values  ("Musica","music"),
         ("Mundo animal","zoo"),
         ("Cine", "film"),
         ("Medicina", "medicine"),
-        ("Leteratura", "literature")
-
+        ("Leteratura", "literature");
 cadenaSQL;
         $res = $connection->exec($sql);
         return result($connection, $res);
@@ -117,7 +129,8 @@ values  ('A qué grupo asociarás "Quadrophenia"?', 1),
         ("Con qué dos países limita Moldavia?", 3),
         ('De qué género es la peli "Asesinato en el Orient Express"?', 5),
         ('En qué parte del cuerpo humano se producen los glóbulos rojos?', 6),
-        ('Los mueciélagos son animales sin el sentido de ...', 4)
+        ('Los mueciélagos son animales sin el sentido de ...', 4),
+        ('QuÃ© concilio se convoca en "El SeÃ±or de los Anillos?"',7)
 
 cadenaSQL;
         $res = $connection->exec($sql);
@@ -166,7 +179,11 @@ values  ("Metallica", 0, 1),
         ("El olfato", 0, 10),
         ("El oído", 0, 10),
         ("La vista", 1, 10),
-        ("El gusto", 0, 10)
+        ("El gusto", 0, 10),
+        ("El Concilio de Elrond", 1, 11),
+        ("El Concilio de Gandalf", 0, 11),
+        ("El Concilio de Mágico", 0, 11),
+        ("El Concilio del Anillo", 0, 11)
 
 cadenaSQL;
         $res = $connection->exec($sql);
@@ -180,13 +197,14 @@ cadenaSQL;
         use_database($connection, "examenator");
         create_table_temas($connection);
         create_table_preguntas($connection);
-        create_table_respuestas($connection);
+				create_table_respuestas($connection);
+				create_table_estadisticas($connection);
         insert_data_to_temas($connection);
         insert_data_to_preguntas($connection);
         insert_data_to_respuestas($connection);
       } catch (Exception $e) {
         echo $e.getMessage();
       }
-      ?>
-    </body>
+      ?> </body>
+
 </html>
