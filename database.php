@@ -1,11 +1,11 @@
 <!doctype html>
 <html lang="es">
-  <head>
-    <meta charset="utf-8">
-  </head>
-  <body>
 
-    <?php
+<head>
+	<meta charset="utf-8"> </head>
+
+<body>
+	<?php
 
     function connect_to_host($host, $username, $password){
       try{
@@ -89,6 +89,19 @@ cadenaSQL;
       return result($connection, $res);
     }
 
+    function create_table_estadisticas($connection){
+      $sql = <<<cadenaSQL
+create table Estadisticas(
+  path varchar(500),
+  clicks int
+  )
+cadenaSQL;
+
+      $res = $connection->exec($sql);
+      return result($connection, $res);
+    }
+
+
     function insert_data_to_temas($connection){
       $sql = <<<cadenaSQL
 insert into Temas(titulo, titulo_url)
@@ -97,8 +110,8 @@ values  ("Musica","music"),
         ("Geografía","geografy"),
         ("Mundo animal","zoo"),
         ("Cine", "film"),
-        ("Medicina", "medicine")
-
+        ("Medicina", "medicine"),
+        ("Leteratura", "literature");
 cadenaSQL;
         $res = $connection->exec($sql);
         return result($connection, $res);
@@ -114,8 +127,10 @@ values  ('A qué grupo asociarás "Quadrophenia"?', 1),
         ("En qué océano o mar estarías si estuvieses en Cerdeña?", 3),
         ("Con qué provincia limita Huelva por el sudeste?", 3),
         ("Con qué dos países limita Moldavia?", 3),
-        ('De qué género es la peli "Asesinato en el Orient Express"?', 5)
-        ('En qué parte del cuerpo humano se producen los glóbulos rojos?', 6)
+        ('De qué género es la peli "Asesinato en el Orient Express"?', 5),
+        ('En qué parte del cuerpo humano se producen los glóbulos rojos?', 6),
+        ('Los murciélagos son animales sin el sentido de ...', 4),
+        ('Qué concilio se convoca en "El Señor de los Anillos?"',7)
 
 cadenaSQL;
         $res = $connection->exec($sql);
@@ -125,42 +140,51 @@ cadenaSQL;
     function insert_data_to_respuestas($connection){
       $sql = <<<cadenaSQL
 insert into Respuestas(respuesta, verdadera, pregunta)
-values  ("Hess", 0, 2),
-        ("Himmler", 1, 2),
-        ("Romel", 0, 2),
-        ("Hitler", 0, 2),
-        ("Drama", 0, 4),
-        ("Comedia", 0, 4),
-        ("Suspense", 1, 4),
-        ("Terror", 0, 4),
-        ("2014", 0, 2),
-        ("1991", 0, 2),
-        ("1989", 0, 2),
-        ("1998", 1, 2),
-        ("Metallica", 0, 1),
+values  ("Metallica", 0, 1),
         ("The Who", 1, 1),
         ("Linkin Park", 0, 1),
         ("AC/DC", 0, 1),
-        ("Suiza", 0, 1),
-        ("Hungtía", 0, 1),
-        ("Alemania", 0, 1),
-        ("Austria", 1, 1),
-        ("Mar Muerto", 0, 3),
-        ("Mar Caspio", 0, 3),
-        ("Mar Mediterráneo", 1, 3),
-        ("Océano Atlantico", 0, 3),
-        ("Cádiz", 1, 3),
-        ("Málaga", 0, 3),
-        ("Sevilla", 0, 3),
-        ("Ciudad Real", 0, 3),
-        ("Bulgaria y Rumanía", 0, 3),
-        ("Rumanía y Ucrania", 1, 3),
-        ("Rumanía y Hunría", 0, 3),
-        ("Polonia y Ucrania", 0, 3),
-        ("Corazón", 0, 6),
-        ("Médula espinal", 0, 6),
-        ("Médula ósea", 1, 6),
-        ("Pulmones", 0, 6)
+        ("Suiza", 0, 2),
+        ("Hungría", 0, 2),
+        ("Alemania", 0, 2),
+        ("Austria", 1, 2),
+        ("Hess", 0, 3),
+        ("Himmler", 1, 3),
+        ("Romel", 0, 3),
+        ("Hitler", 0, 3),
+        ("2014", 0, 4),
+        ("1991", 0, 4),
+        ("1989", 0, 4),
+        ("1998", 1, 4),
+        ("Mar Muerto", 0, 5),
+        ("Mar Caspio", 0, 5),
+        ("Mar Mediterráneo", 1, 5),
+        ("Océano Atlantico", 0, 5),
+        ("Cádiz", 1, 6),
+        ("Málaga", 0, 6),
+        ("Sevilla", 0, 6),
+        ("Ciudad Real", 0, 6),
+        ("Bulgaria y Rumanía", 0, 7),
+        ("Rumanía y Ucrania", 1, 7),
+        ("Rumanía y Hunría", 0, 7),
+        ("Polonia y Ucrania", 0, 7),
+        ("Drama", 0, 8),
+        ("Comedia", 0, 8),
+        ("Suspense", 1, 8),
+        ("Terror", 0, 8),
+        ("Corazón", 0, 9),
+        ("Médula espinal", 0, 9),
+        ("Médula ósea", 1, 9),
+        ("Pulmones", 0, 9),
+        ("El olfato", 0, 10),
+        ("El oído", 0, 10),
+        ("La vista", 1, 10),
+        ("El gusto", 0, 10),
+        ("El Concilio de Elrond", 1, 11),
+        ("El Concilio de Gandalf", 0, 11),
+        ("El Concilio de Mágico", 0, 11),
+        ("El Concilio del Anillo", 0, 11)
+
 cadenaSQL;
         $res = $connection->exec($sql);
         return result($connection, $res);
@@ -168,18 +192,19 @@ cadenaSQL;
 
       try {
         $connection = connect_to_host("localhost", "root", "");
-        delete_database($connection, "examinator");
-        create_database($connection, "examinator");
-        use_database($connection, "examinator");
+        delete_database($connection, "examenator");
+        create_database($connection, "examenator");
+        use_database($connection, "examenator");
         create_table_temas($connection);
         create_table_preguntas($connection);
-        create_table_respuestas($connection);
+				create_table_respuestas($connection);
+				create_table_estadisticas($connection);
         insert_data_to_temas($connection);
         insert_data_to_preguntas($connection);
         insert_data_to_respuestas($connection);
       } catch (Exception $e) {
         echo $e.getMessage();
       }
-      ?>
-    </body>
+      ?> </body>
+
 </html>
