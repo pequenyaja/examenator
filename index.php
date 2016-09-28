@@ -1,4 +1,5 @@
 <?php
+<<<<<<< HEAD
 require "vendor/autoload.php";
 require "controller/controller.php";
 require "controller/controllerThemes.php";
@@ -37,3 +38,15 @@ $app->get("/question/new", "\Controller:newQuestion")->add($auth);
 $app->post("/question/new", "\Controller:createQuestion")->add($auth);
 $app->run();
 ?>
+=======
+  require "vendor/autoload.php";
+    $app = new Slim\App();
+
+    $app->get('/', function($request, $response, $args){
+        $response->write("<h1>Hola Git! Si no funcionas bien, te desinstalo!!!</h1>");
+        return $response;
+  });
+
+  $app->run();
+ ?>
+>>>>>>> 8840f3d2a8dd6de352e92145f7b4bdc15567e17e
